@@ -1,11 +1,16 @@
 import React from "react";
 import { ErrorMessage, Field, FieldProps, FormikProps } from "formik";
-import { Dropdown, DropdownProps, Form } from "semantic-ui-react";
-import { Diagnosis, Gender } from "../types";
+import { Dropdown, DropdownProps, Form, Input, Label } from "semantic-ui-react";
+import { Diagnosis, Gender, EntryTypes, NewEntry } from "../types";
 
 // structure of a single option
 export type GenderOption = {
   value: Gender;
+  label: string;
+};
+
+export type EntryTypeOption = {
+  value: EntryTypes;
   label: string;
 };
 
@@ -14,6 +19,13 @@ type SelectFieldProps = {
   name: string;
   label: string;
   options: GenderOption[];
+};
+
+type SelectEntryTypeProps = {
+  name: string;
+  label: string;
+  options: EntryTypeOption[];
+  setValues: (values: NewEntry) => void;
 };
 
 export const SelectField: React.FC<SelectFieldProps> = ({
@@ -62,8 +74,8 @@ interface NumberProps extends FieldProps {
 export const NumberField: React.FC<NumberProps> = ({
   field,
   label,
-  min,
   max,
+  min,
 }) => (
   <Form.Field>
     <label>{label}</label>
@@ -72,6 +84,57 @@ export const NumberField: React.FC<NumberProps> = ({
     <div style={{ color: "red" }}>
       <ErrorMessage name={field.name} />
     </div>
+  </Form.Field>
+);
+
+export const SelectEntryType: React.FC<SelectEntryTypeProps> = ({
+  label,
+  options,
+  name,
+  setValues,
+}) => (
+  <Form.Field>
+    <label>{label}</label>
+    <Field as="select" name={name} className="dropdown ui">
+      {options.map((op) => (
+        <option
+          onClick={() => {
+            if (op.value === EntryTypes.Hospital) {
+              setValues({
+                type: "Hospital",
+                description: "",
+                date: "",
+                specialist: "",
+                discharge: {
+                  criteria: "",
+                  date: "",
+                },
+              });
+            } else if (op.value === EntryTypes.HealthCheck) {
+              setValues({
+                type: "HealthCheck",
+                description: "",
+                date: "",
+                specialist: "",
+                healthCheckRating: 1,
+              });
+            } else if (op.value === EntryTypes.OccupationalHealthcare) {
+              setValues({
+                type: "OccupationalHealthcare",
+                description: "",
+                date: "",
+                specialist: "",
+                employerName: "",
+              });
+            }
+          }}
+          key={op.value}
+          value={op.value}
+        >
+          {op.label || op.value}
+        </option>
+      ))}
+    </Field>
   </Form.Field>
 );
 
@@ -111,6 +174,32 @@ export const DiagnosisSelection = ({
         onChange={onChange}
       />
       <ErrorMessage name={field} />
+    </Form.Field>
+  );
+};
+
+export const OptionalSickLeave = ({
+  setFieldTouched,
+  fieldName,
+  label,
+  setFieldValue,
+}: {
+  setFieldTouched: FormikProps<{
+    [fieldName: string]: string;
+  }>["setFieldTouched"];
+  fieldName: string;
+  label: string;
+  setFieldValue: FormikProps<{ [fieldName: string]: string }>["setFieldValue"];
+}) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setFieldTouched(fieldName, true);
+    setFieldValue(fieldName, e.target.value);
+  };
+
+  return (
+    <Form.Field>
+      <Label>{label}</Label>
+      <Input type="text" onChange={onChange} />
     </Form.Field>
   );
 };

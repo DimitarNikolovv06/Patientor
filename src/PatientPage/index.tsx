@@ -7,7 +7,6 @@ import { apiBaseUrl } from "../constants";
 import EntryComponent from "./Entry";
 import { Icon, Button } from "semantic-ui-react";
 import AddEntryModal from "./AddEntryModal";
-// import AddEntryForm from "./AddEntryForm";
 
 const PatientPage: React.FC = () => {
   const [{ patients }, dispatch] = useStateValue();
@@ -31,6 +30,7 @@ const PatientPage: React.FC = () => {
       );
       dispatch(addNewEntryAction({ entry: data, id }));
       closeModal();
+      console.log(patients);
     } catch (e) {
       console.log(e);
       setError(e.response.data.error);
@@ -60,11 +60,11 @@ const PatientPage: React.FC = () => {
           alignItems: "center",
         }}
       >
-        <h1 style={{ margin: 20 }}>{patient?.name}</h1>
+        <h1>{patient?.name}</h1>
         {patient?.gender === "male" ? (
-          <Icon name="male" size="big" />
+          <Icon name="man" size="big" />
         ) : (
-          <Icon name="female" size="big" />
+          <Icon name="woman" size="big" />
         )}
       </div>
       <h4>ssn: {patient?.ssn}</h4>
