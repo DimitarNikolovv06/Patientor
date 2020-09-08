@@ -2,6 +2,12 @@ import React from "react";
 import { HealthCheckRating } from "../types";
 import { Icon } from "semantic-ui-react";
 
+const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
+  );
+};
+
 const HeartColor: React.FC<{ rating: HealthCheckRating }> = ({ rating }) => {
   switch (rating) {
     case HealthCheckRating.Healthy:
@@ -17,7 +23,7 @@ const HeartColor: React.FC<{ rating: HealthCheckRating }> = ({ rating }) => {
       return <Icon name="heart" color="red" />;
 
     default:
-      return <p>kur</p>;
+      return assertNever(rating);
   }
 };
 

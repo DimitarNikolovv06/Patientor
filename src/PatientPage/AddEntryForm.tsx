@@ -65,12 +65,9 @@ const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
           errors.healthCheckRating = requiredError;
         }
 
-        // if (
-        //   values.type === "Hospital" &&
-        //   (!values.discharge.criteria || !values.discharge.date)
-        // ) {
-        //   errors.type = requiredError;
-        // }
+        if (values.type === "Hospital" && !values.discharge) {
+          errors.type = requiredError;
+        }
         if (values.type === "OccupationalHealthcare" && !values.employerName) {
           errors.type = requiredError;
         }
@@ -176,8 +173,6 @@ const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
               label="Entry type"
               setValues={setValues}
             />
-            {console.log(values)}
-
             <Grid>
               <Grid.Column floated="left" width={5}>
                 <Button onClick={onCancel} type="button" color="red">

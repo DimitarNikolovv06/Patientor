@@ -30,9 +30,7 @@ const PatientPage: React.FC = () => {
       );
       dispatch(addNewEntryAction({ entry: data, id }));
       closeModal();
-      console.log(patients);
     } catch (e) {
-      console.log(e);
       setError(e.response.data.error);
     }
   };
